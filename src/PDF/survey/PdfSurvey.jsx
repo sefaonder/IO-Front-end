@@ -10,19 +10,6 @@ import PdfCheckbox from '../pdfComponents/PdfCheckbox';
 Font.register({ family: 'Turkish', src: turkishregular });
 Font.register({ family: 'Turkishbold', src: turkishbold });
 const PdfSurvey = ({ data }) => {
-  console.log(data);
-  let companyInfo = [
-    { name: 'Firma Adı', value: data?.company_name },
-    { name: 'Adresi', value: data?.company_address },
-  ];
-  let studentInfo = [
-    { name: 'Ögretim Türü', value: data?.teach_type },
-    { name: 'GANO', value: data?.gano },
-    { name: 'Staj Grubu', value: data?.intern_group },
-    { name: 'Staj Turu', value: data?.intern_type },
-    { name: 'Tarih', value: new Date(data?.date).toLocaleDateString('tr-TR') },
-  ];
-
   if (!data) {
     return 'asd';
   }
@@ -31,6 +18,8 @@ const PdfSurvey = ({ data }) => {
     'BİLGİSAYAR MÜHENDİSLİĞİ BÖLÜMÜ',
     'STAJ DEĞERLENDİRME ANKET FORMU',
   ];
+  console.log(data);
+  const gaps = ['1.79 ve altı', '1.80 - 1.99', '2.00 - 2.49', '2.50 - 2.99', '3.00 - 3.49', '3.50 - 4.00'];
   return (
     <Document>
       <Page style={styles.page} size="A4">
@@ -109,13 +98,11 @@ const PdfSurvey = ({ data }) => {
                       justifyContent: 'flex-end',
                     }}
                   >
-                    {['1.79 ve altı', '1.80 - 1.99', '2.00 - 2.49', '2.50 - 2.99', '3.00 - 3.49', '3.50 - 4.00'].map(
-                      (item, index) => (
-                        <View style={styles.checkboxItem}>
-                          <PdfCheckbox text={item} checked={item === data?.gano} />
-                        </View>
-                      ),
-                    )}
+                    {gaps.map((item, index) => (
+                      <View style={styles.checkboxItem}>
+                        <PdfCheckbox text={item} checked={item === data?.gano} />
+                      </View>
+                    ))}
                   </View>
                 </View>
                 <View
@@ -136,8 +123,16 @@ const PdfSurvey = ({ data }) => {
                       </View>
                     ))}
                   </View>
-                  <View>
-                    <Text style={{ fontFamily: 'Turkishbold' }}>Tarih: 12/12/1212</Text>
+                  <View
+                    style={{
+                      fontFamily: 'Turkishbold',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <Text>Tarih:</Text>
+                    <Text>{new Date(data?.date).toLocaleDateString('tr-TR')}</Text>
                   </View>
                 </View>
               </View>
